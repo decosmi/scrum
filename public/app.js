@@ -49,15 +49,49 @@ app.controller('loginCtrl', function($scope, $http){
             url:'/scrum',
             params: {username:$scope.username, password:$scope.password} 
         }).then(function successCallback(data){
-        	console.log("It worked!");
         	console.log(data);
-   
         }, 
         function errorCallback(data){
-        	console.log("Not this time, buddy.");
-            console.log(data);
+        	alert("Your username and password were not found. Please retry or register.")
         }); 
     }
+});
+
+app.controller('teamCtrl', function($scope,$http) {
+	$scope.teamMembers=[];
+
+	// $scope.findTeam=function(){
+
+	// }
+
+	$scope.addTeam= function(){
+        $http({
+            method:'POST',
+            url:'/team',
+            data: {teamName:$scope.teamName} 
+        }).then(function successCallback(data){
+        	alert("You've successfully added your team.");
+        }, 
+        function errorCallback(data){
+     		console.log("Didn't work.");
+        });  		
+	}
+
+	// $scope.addUsers=function {
+	// 	    $scope.addRegistrants = function(){   
+ //        $http({
+ //            method:'POST',
+ //            url:'/scrum',
+ //            data: {username:$scope.newUser, password:$scope.newPassword} 
+ //        }).then(function successCallback(data){
+ //            return true;
+ //        }, 
+ //        function errorCallback(data){
+ //        return false;
+ //        });  
+ //    }
+	// }
+
 });
 
 
@@ -86,27 +120,7 @@ app.controller('loginCtrl', function($scope, $http){
 //     }
 // });
 
-// app.controller('createTeamCtrl', function($scope) {
-// 	$scope.addTeam= function(){
-// 		//need a function that will add a team to the database 
-// 	}
 
-// 	$scope.addUsers=function {
-// 		    $scope.addRegistrants = function(){   
-//         $http({
-//             method:'POST',
-//             url:'/scrum',
-//             data: {username:$scope.newUser, password:$scope.newPassword} 
-//         }).then(function successCallback(data){
-//             return true;
-//         }, 
-//         function errorCallback(data){
-//         return false;
-//         });  
-//     }
-// 	}
-
-// });
 
 // app.controller('registerCtrl', function($scope) {
 // 	$scope.addUser= function(){

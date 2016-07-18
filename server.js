@@ -15,13 +15,13 @@ app.listen(3000,function(){
 });
 
 app.post("/scrum", function(request, response) {
-	response.send(request.body.data); 
-	console.log(request.body.username);
 	databaseManager.saveUser(request.body.username,request.body.password);
 });
 
 app.get("/scrum", function(request,response){
-	response.send(request);
-	console.log(request);
-	databaseManager.readProfile("Tristan","password");
+	databaseManager.readProfile(request.query.username,request.query.password);
+});
+
+app.post("/team", function(request, response) {
+	databaseManager.createTeam(request.body.teamName);
 });

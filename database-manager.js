@@ -26,7 +26,6 @@ module.exports = (function() {
 	}
 
 	var readProfile= function(username,password){
-		console.log("We get to the database manager!");
 		pool.query(
 			"SELECT id FROM individuals" +
 			" WHERE user_name = $1" +
@@ -37,8 +36,21 @@ module.exports = (function() {
 		);
 	}
 
+	var createTeam= function(team_name){
+		console.log(team_name);
+		pool.query(
+			"INSERT INTO team" +
+			" (team_name)" +
+			" VALUES ($1)", [team_name], function(error,result){
+				if (error) return console.log(error);
+			}
+		);
+	}	
+
  	return {
- 		saveUser: saveUser
+ 		saveUser: saveUser,
+ 		readProfile: readProfile,
+ 		createTeam: createTeam
 	};
 
 })();
@@ -53,17 +65,6 @@ module.exports = (function() {
 	// 		}
 	// 	);
 	// }
-
-	// var createTeam= function(team_name, team_members,){
-	// 	pool.query(
-	// 		"INSERT INTO team" +
-	// 		" (team-name, team_members)" +
-	// 		" VALUES ($1,$2)", [team-name, team_members], function(error,result){
-	// 			if (error) return console.log(error);
-	// 		}
-	// 	);
-	// }
-
 
 	// var addTeamMembers= function(unsure){ 
 	// 	pool.query(
