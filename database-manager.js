@@ -13,17 +13,36 @@ module.exports = (function() {
     database: "postgres"
   };
 
-	// var pool = new Pool(config);
+	var pool = new Pool(config);
 
-	// var saveUser= function(username,password){
-	// 	pool.query (
-	// 		"INSERT INTO individuals" +
-	// 		"(username, password)" +
-	// 		"VALUES ($1, $2) RETURNING id", [username, password], function (error, result){
-	// 			if (error) return console.log(error);
-	// 		}
-	// 	);
-	// }
+	var saveUser= function(username,password){
+		pool.query (
+			"INSERT INTO individuals" +
+			"(user_name, password)" +
+			"VALUES ($1, $2) RETURNING id", [username, password], function (error, result){
+				if (error) return console.log(error);
+			}
+		);
+	}
+
+	var readProfile= function(username,password){
+		console.log("We get to the database manager!");
+		pool.query(
+			"SELECT id FROM individuals" +
+			" WHERE user_name = $1" +
+			" AND password = $2;", [username, password], function(error, result){
+				if (error) return console.log(error);
+				//var profileID=result.rows[0].id;
+			}
+		);
+	}
+
+ 	return {
+ 		saveUser: saveUser
+	};
+
+})();
+
 
 	// var createGoal= function(goal,team_id, assigned_user_id){
 	// 	pool.query(
@@ -54,12 +73,3 @@ module.exports = (function() {
 	// 		}
 	// 	);
 	// }
-
-// 	return {
-// 		saveUser: saveUser,
-// 		createGoal: createGoal,
-// 		createTeam: createTeam,
-// 		addTeamMembers: addTeamMembers
-// 	};
-
-// })();

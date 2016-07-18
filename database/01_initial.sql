@@ -1,7 +1,6 @@
 ﻿DROP TABLE IF EXISTS goals;
-DROP TABLE IF EXISTS team;
 DROP TABLE IF EXISTS individuals;
-
+DROP TABLE IF EXISTS team;
 
 CREATE TABLE team (
 	id     		serial PRIMARY KEY,
@@ -13,7 +12,7 @@ ALTER TABLE team OWNER TO scrum_server;
 
 CREATE TABLE individuals (
 	id 					serial PRIMARY KEY,
- 	individuals_name	text,
+ 	user_name			text,
 	password			text,
 	team_id				integer,			
 
