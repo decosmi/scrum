@@ -23,8 +23,8 @@ app.get("/scrum", function(request,response){
 });
 
 app.post("/team", function(request, response) {
-	console.log(request.body.teamName);
-	databaseManager.createTeam(request.body.teamName);
+	console.log(request.body.team_name);
+	databaseManager.createTeam(request.body.team_name);
 });
 
 app.get("/team", function(request, response) {

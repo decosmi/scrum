@@ -62,6 +62,7 @@ app.controller('teamCtrl', function($scope,$http) {
     $scope.teamID=[];
 
 	$scope.addTeam= function(){
+        console.log($scope.teamName);
         $http({
             method:'POST',
             url:'/team',
