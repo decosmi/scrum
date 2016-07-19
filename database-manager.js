@@ -25,6 +25,34 @@ module.exports = (function() {
 		);
 	}
 
+	var getTeamIDFromName= function(team_name,userID,callback){
+		console.log(userID);
+		console.log(team_name);
+		pool.query(
+			"SELECT id FROM team" +
+			" WHERE team_name = $1;", [team_name], function(error,result){
+				if (error) return console.log("Whoops");
+				//console.log(result.rows);
+				//console.log(userID);
+				callback(userID, result.rows[0].id);
+			});
+
+	}
+
+	var updateUserWithTeam= function(userID,teamID){
+		//console.log("This is what it received for teamID:")
+		//console.log(teamID.rows);
+		//console.log("This is what it received for userID:")
+		//console.log(userID.rows);
+		pool.query (
+			"UPDATE individuals" +
+			" SET team_id = $1" +
+			" WHERE id= $2;", [teamID, userID], function(error,result){
+				if (error) return console.log("Oops");
+			}
+		);
+	}
+
 	var readProfile= function(username,password,callback){
 		pool.query(
 			"SELECT id FROM individuals" +
@@ -37,7 +65,6 @@ module.exports = (function() {
 	}
 
 	var createTeam= function(team_name){
-		console.log(team_name);
 		pool.query(
 			"INSERT INTO team" +
 			" (team_name)" +
@@ -60,7 +87,9 @@ module.exports = (function() {
  		saveUser: saveUser,
  		readProfile: readProfile,
  		createTeam: createTeam,
- 		retrieveTeams: retrieveTeams
+ 		retrieveTeams: retrieveTeams,
+ 		updateUserWithTeam: updateUserWithTeam,
+ 		getTeamIDFromName: getTeamIDFromName
 	};
 
 })();

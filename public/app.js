@@ -62,7 +62,8 @@ app.controller('loginCtrl', function($scope, $http,sendData){
 app.controller('teamCtrl', function($scope,$http,sendData) {
 	$scope.teamMembers=[];
     $scope.teams=[];
-    $scope.teamID=[];
+    $scope.teamID=[];//make sure to delete this and the push function that goes with it if you don't use it
+    
 
 	$scope.addTeam= function(){
         console.log($scope.teamName);
@@ -88,16 +89,17 @@ app.controller('teamCtrl', function($scope,$http,sendData) {
                 $scope.teams.push(data.data.rows[i].team_name);
                 $scope.teamID.push(data.data.rows[i].id);
             }      
-            console.log(sendData.userID);
             }, 
             function errorCallback(data){console.log("Didn't work.")
         });
     }
     $scope.joinTeam= function(){
         console.log(sendData.userID);
+        console.log($scope.selectedName);
         $http({
-            method:'PUT',
-            url:'/team',
+            method:'GET',
+            url:'/userteam',
+            params: {team_name:$scope.selectedName, id:sendData.userID} 
         }).then(function successCallback(data){
             alert("You've successfully added your team.");
         }, 
@@ -109,5 +111,6 @@ app.controller('teamCtrl', function($scope,$http,sendData) {
 
 app.service('sendData',function(){
     this.userID=0;
+    this.users=[];
 
 });

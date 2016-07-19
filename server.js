@@ -32,6 +32,10 @@ app.post("/team", function(request, response) {
 
 app.get("/team", function(request, response) {
 	databaseManager.retrieveTeams(function(result){
-		return response.send(result.body);
+		return response.send(result);
 	});
 });
+
+app.get("/userteam", function(request,response){
+	databaseManager.getTeamIDFromName(request.query.team_name,request.query.id, databaseManager.updateUserWithTeam);
+})
