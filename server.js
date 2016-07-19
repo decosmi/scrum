@@ -19,16 +19,19 @@ app.post("/scrum", function(request, response) {
 });
 
 app.get("/scrum", function(request,response){
-	databaseManager.readProfile(request.query.username,request.query.password);
+	databaseManager.readProfile(request.query.username,request.query.password, function(result){
+		return response.send(result); 
+
+	});
 });
 
 app.post("/team", function(request, response) {
-	console.log(request.body.team_name);
+	//console.log(request.body.team_name);
 	databaseManager.createTeam(request.body.team_name);
 });
 
 app.get("/team", function(request, response) {
 	databaseManager.retrieveTeams(function(result){
-		return response.send(result);
+		return response.send(result.body);
 	});
 });

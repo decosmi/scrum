@@ -25,13 +25,13 @@ module.exports = (function() {
 		);
 	}
 
-	var readProfile= function(username,password){
+	var readProfile= function(username,password,callback){
 		pool.query(
 			"SELECT id FROM individuals" +
 			" WHERE user_name = $1" +
 			" AND password = $2;", [username, password], function(error, result){
 				if (error) return console.log(error);
-				//var profileID=result.rows[0].id;
+				callback(result);
 			}
 		);
 	}

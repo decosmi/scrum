@@ -42,21 +42,24 @@ app.controller('registerCtrl', function($scope, $http){
     }
 });
 
-app.controller('loginCtrl', function($scope, $http){
+app.controller('loginCtrl', function($scope, $http,sendData){
     $scope.verifyUser = function(){  
         $http({
             method:'GET',
             url:'/scrum',
             params: {username:$scope.username, password:$scope.password} 
         }).then(function successCallback(data){
+            sendData.userID=data.data.rows[0].id;
+            console.log(sendData.userID);
         }, 
         function errorCallback(data){
-        	alert("Your username and password were not found. Please retry or register.")
+        	console.log("Your username and password were not found. Please retry or register.");
+            console.log(data);
         }); 
     }
 });
 
-app.controller('teamCtrl', function($scope,$http) {
+app.controller('teamCtrl', function($scope,$http,sendData) {
 	$scope.teamMembers=[];
     $scope.teams=[];
     $scope.teamID=[];
@@ -85,11 +88,13 @@ app.controller('teamCtrl', function($scope,$http) {
                 $scope.teams.push(data.data.rows[i].team_name);
                 $scope.teamID.push(data.data.rows[i].id);
             }      
+            console.log(sendData.userID);
             }, 
             function errorCallback(data){console.log("Didn't work.")
         });
     }
     $scope.joinTeam= function(){
+        console.log(sendData.userID);
         $http({
             method:'PUT',
             url:'/team',
@@ -100,4 +105,9 @@ app.controller('teamCtrl', function($scope,$http) {
             console.log("Didn't work.");
         });         
     }
+});
+
+app.service('sendData',function(){
+    this.userID=0;
+
 });
