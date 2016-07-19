@@ -20,7 +20,7 @@
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
 </head>
 <body ng-app="myApp" >
-	<div id="header">
+	<div id="header" class="jumbotron">
 		<h1><span id="headerOne">Scrum Boss</span> | <span id="headerTwo">Project Management Tool</span></h1>
 	</div>
 	<div id="intro">
@@ -44,14 +44,20 @@
 	</div>
 
 	<div id="teamRegister" class="row" ng-controller="teamCtrl">
-		<div class="col-md-6">
+		<div class="col-md-4">
+			<h2>Join a team!</h2>
+			<button ng-click="findTeams()">Find Teams</button>
+			<select ng-model="selectedName" ng-options="x for x in teams"></select>
+			<button ng-click="joinTeam()">Join</button>
+	    </div>
+		<div class="col-md-4">
 			<h2>Create a team!</h2>
 			<form ng-submit="addTeam()">	    
 				<input type="text" ng-model="teamName" placeholder="Name Your Team">
 		    	<input type="submit" value="Create A Team">
 		    </form>
 	    </div>
-	    <div class="col-md-6">
+	    <div class="col-md-4">
 	    	<h2>Add team members.</h2>
 			<form>	    
 				<input type="text" ng-model="member" placeholder="Enter your team member's username here.">

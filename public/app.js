@@ -49,7 +49,6 @@ app.controller('loginCtrl', function($scope, $http){
             url:'/scrum',
             params: {username:$scope.username, password:$scope.password} 
         }).then(function successCallback(data){
-        	console.log(data);
         }, 
         function errorCallback(data){
         	alert("Your username and password were not found. Please retry or register.")
@@ -59,16 +58,14 @@ app.controller('loginCtrl', function($scope, $http){
 
 app.controller('teamCtrl', function($scope,$http) {
 	$scope.teamMembers=[];
-
-	// $scope.findTeam=function(){
-
-	// }
+    $scope.teams=[];
+    $scope.teamID=[];
 
 	$scope.addTeam= function(){
         $http({
             method:'POST',
             url:'/team',
-            data: {teamName:$scope.teamName} 
+            data:{team_name:$scope.teamName}
         }).then(function successCallback(data){
         	alert("You've successfully added your team.");
         }, 
@@ -77,64 +74,29 @@ app.controller('teamCtrl', function($scope,$http) {
         });  		
 	}
 
-	// $scope.addUsers=function {
-	// 	    $scope.addRegistrants = function(){   
- //        $http({
- //            method:'POST',
- //            url:'/scrum',
- //            data: {username:$scope.newUser, password:$scope.newPassword} 
- //        }).then(function successCallback(data){
- //            return true;
- //        }, 
- //        function errorCallback(data){
- //        return false;
- //        });  
- //    }
-	// }
-
+    $scope.findTeams= function(){
+        $http({
+            method:'GET',
+            url:'/team',
+        }) 
+        .then(function successCallback(data){
+            for (var i=0; i<data.data.rows.length;i++) {
+                $scope.teams.push(data.data.rows[i].team_name);
+                $scope.teamID.push(data.data.rows[i].id);
+            }      
+            }, 
+            function errorCallback(data){console.log("Didn't work.")
+        });
+    }
+    $scope.joinTeam= function(){
+        $http({
+            method:'PUT',
+            url:'/team',
+        }).then(function successCallback(data){
+            alert("You've successfully added your team.");
+        }, 
+        function errorCallback(data){
+            console.log("Didn't work.");
+        });         
+    }
 });
-
-
-// app.controller('loginCtrl', function($scope, $http, sendData,$rootScope,controlDisplay){
-//     $scope.verifyUser = function(){  
-//         $scope.showLogin= function(){
-//         return controlDisplay.showLogin;
-//         }
-//         $http({
-//             method:'GET',
-//             url:'/users',
-//             params: {username:$scope.username, password:$scope.password} 
-//         }).then(function successCallback(data){
-//             sendData.profileID=data.data.rows[0].profile_id;
-//             sendData.userList=data.data.rows[0].item;
-//             controlDisplay.showLogin=false;
-//             controlDisplay.showRegister=false;
-//             controlDisplay.showList=true;
-//             $rootScope.$broadcast('receivedList')
-   
-//         }, 
-//         function errorCallback(error){
-//             console.log(error);
-//         }); 
-
-//     }
-// });
-
-
-
-// app.controller('registerCtrl', function($scope) {
-// 	$scope.addUser= function(){
-// 		//need a function that will add a team to the database 
-// 	}
-
-// 	$scope.addUsers=function {
-// 		//need a function that will add users to the team 
-// 	}
-
-// });
-
-// 1. The user needs to register.
-// 2. The user needs to login. 
-// 3. The user needs the ability to create teams. 
-// 4. Each team/project should have a to-do list. 
-// 5. Each item has an assigned user. 

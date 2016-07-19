@@ -47,10 +47,20 @@ module.exports = (function() {
 		);
 	}	
 
+	var retrieveTeams= function(callback){
+		pool.query(
+			"SELECT * FROM team", function(error,result){
+				if (error) return console.log(error);
+				callback(result);
+			});
+
+	}	
+
  	return {
  		saveUser: saveUser,
  		readProfile: readProfile,
- 		createTeam: createTeam
+ 		createTeam: createTeam,
+ 		retrieveTeams: retrieveTeams
 	};
 
 })();
