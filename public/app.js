@@ -63,7 +63,7 @@ app.controller('teamCtrl', function($scope,$http,sendData) {
 	$scope.teamMembers=[];
     $scope.teams=[];
     $scope.teamID=[];//make sure to delete this and the push function that goes with it if you don't use it
-    
+
 
 	$scope.addTeam= function(){
         console.log($scope.teamName);
@@ -106,6 +106,23 @@ app.controller('teamCtrl', function($scope,$http,sendData) {
         function errorCallback(data){
             console.log("Didn't work.");
         });         
+    }
+    $scope.findUsers= function(){
+        $scope.users=sendData.users
+        console.log($scope.users);
+        $http({
+            method:'GET',
+            url:'/users',
+        }) 
+        .then(function successCallback(data){
+            console.log("right before the for loop");
+            console.log(data);
+            for (var i=0; i<data.data.rows.length;i++) {
+                $scope.users.push(data.data.rows[i].user_name);
+            }      
+            }, 
+            function errorCallback(data){console.log("Didn't work.")
+        });
     }
 });
 

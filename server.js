@@ -38,4 +38,10 @@ app.get("/team", function(request, response) {
 
 app.get("/userteam", function(request,response){
 	databaseManager.getTeamIDFromName(request.query.team_name,request.query.id, databaseManager.updateUserWithTeam);
-})
+});
+
+app.get("/users", function(request,response){
+	databaseManager.retrieveUsers(function(result){
+		return response.send(result);
+	});
+});
