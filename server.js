@@ -15,7 +15,7 @@ app.listen(3000,function(){
 });
 
 app.post("/scrum", function(request, response) {
-	databaseManager.saveUser(request.body.username,request.body.password);
+	databaseManager.saveUser(request.body.username,request.body.password,request.body.team_name,databaseManager.getTeamIDFromName);
 });
 
 app.get("/scrum", function(request,response){
@@ -36,7 +36,7 @@ app.get("/team", function(request, response) {
 });
 
 app.get("/userteam", function(request,response){
-	databaseManager.getTeamIDFromName(request.query.team_name,request.query.id, databaseManager.partialUpdateUserWithTeam);
+	databaseManager.getTeamIDFromName(request.query.team_name,request.query.id, databaseManager.UpdateUserWithTeam);
 });
 
 app.get("/users", function(request,response){

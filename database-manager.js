@@ -15,12 +15,13 @@ module.exports = (function() {
 
 	var pool = new Pool(config);
 
-	var saveUser= function(username,password){
+	var saveUser= function(username,password,teamname,callback){
 		pool.query (
 			"INSERT INTO individuals" +
 			"(user_name, password)" +
 			"VALUES ($1, $2) RETURNING id", [username, password], function (error, result){
 				if (error) return console.log(error);
+				callback(teamname,result.rows[0].id,updateUserWithTeam);
 			}
 		);
 	}
@@ -37,8 +38,6 @@ module.exports = (function() {
 	}
 
 	var getTeamIDFromName= function(team_name,userID,callback){
-		console.log(userID);
-		console.log(team_name);
 		pool.query(
 			"SELECT id FROM team" +
 			" WHERE team_name = $1;", [team_name], function(error,result){
@@ -48,27 +47,20 @@ module.exports = (function() {
 			});
 
 	}
-	var partialUpdateUserWithTeam= function(userID,callback){
-		return function(teamID) {
-			updateUserWithTeam(userID,teamID,callback)
-		}
-	}
 
-
-	var updateUserWithTeam= function(userID,teamID,callback){
+	var updateUserWithTeam= function(userID,team_id){
 		pool.query (
 			"UPDATE individuals" +
 			" SET team_id = $1" +
-			" WHERE id= $2;", [teamID, userID], function(error,result){
+			" WHERE id= $2;", [team_id, userID], function(error,result){
 				if (error) return console.log("Oops");
-				callback(result);//here I would like to have a callback that returns the response to app.js
 			}
 		);
 	}
 
 	var readProfile= function(username,password,callback){
 		pool.query(
-			"SELECT id FROM individuals" +
+			"SELECT * FROM individuals" +
 			" WHERE user_name = $1" +
 			" AND password = $2;", [username, password], function(error, result){
 				if (error) return console.log(error);
@@ -145,7 +137,6 @@ module.exports = (function() {
  		retrieveUsers: retrieveUsers,
  		getUserIDFromName: getUserIDFromName,
  		createGoal: createGoal,
- 		partialUpdateUserWithTeam: partialUpdateUserWithTeam,
  		getTeamMembers: getTeamMembers
 	};
 

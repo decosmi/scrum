@@ -53,30 +53,47 @@ app.controller('toDoCtrl', function($scope,$http,sendData) {
 
 });
 
-app.controller('registerCtrl', function($scope, $http){   
+app.controller('registerCtrl', function($scope, $http,sendData){   
+    $scope.teams=[];
+
     $scope.addRegistrants = function(){   
         $http({
             method:'POST',
             url:'/scrum',
-            data: {username:$scope.newUser, password:$scope.newPassword} 
+            data: {username:$scope.newUser, password:$scope.newPassword,team_name:$scope.selectedName,} 
         }).then(function successCallback(data){
         }, 
         function errorCallback(data){
         	console.log("It didn't work.");
         });  
     }
-    
-    $scope.joinTeam= function(){
+
+    $scope.addTeam= function(){
         $http({
-            method:'GET',
-            url:'/userteam',
-            params: {team_name:$scope.selectedName, id:sendData.userID} 
+            method:'POST',
+            url:'/team',
+            data:{team_name:$scope.teamName}
         }).then(function successCallback(data){
             console.log(data);
         }, 
         function errorCallback(data){
             console.log("Didn't work.");
+            console.log(data);
         });         
+    }
+
+    $scope.findTeams= function(){
+        $http({
+            method:'GET',
+            url:'/team',
+        }) 
+        .then(function successCallback(data){
+            for (var i=0; i<data.data.rows.length;i++) {
+                $scope.teams.push(data.data.rows[i].team_name);
+            }      
+            }, 
+            function errorCallback(data){console.log("Didn't work.")
+        });
     }
 });
 
@@ -88,7 +105,10 @@ app.controller('loginCtrl', function($scope, $http,sendData){
             params: {username:$scope.username, password:$scope.password} 
         }).then(function successCallback(data){
             sendData.userID=data.data.rows[0].id;
-            console.log(sendData.userID);
+            sendData.teamID=data.data.rows[0].team_id;
+            sendData.username=data.data.rows[0].user_name;
+            console.log(sendData.username);
+
         }, 
         function errorCallback(data){
         	console.log("Your username and password were not found. Please retry or register.");
@@ -98,38 +118,9 @@ app.controller('loginCtrl', function($scope, $http,sendData){
 });
 
 app.controller('teamCtrl', function($scope,$http,sendData) {
-    $scope.teams=[];
-    $scope.teamID=[];//make sure to delete this and the push function that goes with it if you don't use it
 
 
-	$scope.addTeam= function(){
-        $http({
-            method:'POST',
-            url:'/team',
-            data:{team_name:$scope.teamName}
-        }).then(function successCallback(data){
-            console.log(data);
-        }, 
-        function errorCallback(data){
-     		console.log("Didn't work.");
-            console.log(data);
-        });  		
-	}
 
-    $scope.findTeams= function(){
-        $http({
-            method:'GET',
-            url:'/team',
-        }) 
-        .then(function successCallback(data){
-            for (var i=0; i<data.data.rows.length;i++) {
-                $scope.teams.push(data.data.rows[i].team_name);
-                $scope.teamID.push(data.data.rows[i].id);
-            }      
-            }, 
-            function errorCallback(data){console.log("Didn't work.")
-        });
-    }
 
 
     $scope.findUsers= function(){
@@ -155,8 +146,11 @@ app.controller('teamCtrl', function($scope,$http,sendData) {
 
 app.service('sendData',function(){
     this.userID=0;
-    this.users=[];
+    this.username=0;
     this.teamID=30;
     this.assignedUserID=0;
+    this.users=[];
+
+
 
 });
