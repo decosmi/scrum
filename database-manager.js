@@ -27,7 +27,6 @@ module.exports = (function() {
 	}
 
 	var getUserIDFromName= function(username,callback){
-		console.log(username);
 		pool.query(
 			"SELECT id FROM individuals" +
 			" WHERE user_name = $1;", [username], function(error,result){
@@ -42,7 +41,6 @@ module.exports = (function() {
 			"SELECT id FROM team" +
 			" WHERE team_name = $1;", [team_name], function(error,result){
 				if (error) return console.log("Whoops");
-				console.log(result.rows[0].id);
 				callback(userID, result.rows[0].id);
 			});
 
@@ -53,6 +51,15 @@ module.exports = (function() {
 			"UPDATE individuals" +
 			" SET team_id = $1" +
 			" WHERE id= $2;", [team_id, userID], function(error,result){
+				if (error) return console.log("Oops");
+			}
+		);
+	}
+
+	var updateGoals= function(id){
+		pool.query (
+			"DELETE FROM goals" +
+			" WHERE id= $1;", [id], function(error,result){
 				if (error) return console.log("Oops");
 			}
 		);
@@ -97,15 +104,6 @@ module.exports = (function() {
 
 	}
 
-	var retrieveUsers= function(callback){
-		pool.query(
-			"SELECT * FROM individuals", function(error,result){
-				if (error) return console.log(error);
-				callback(result);
-			});
-
-	}
-
 	var getTeamMembers= function(team_id,callback){
 		pool.query(
 			"SELECT user_name FROM individuals" +
@@ -115,11 +113,11 @@ module.exports = (function() {
 			});
 
 	}
-	var createGoal= function(goal,team_id, user_id,callback){
+	var createGoal= function(goal,status,team_id, assigned_user_id,callback){
 		pool.query(
 			"INSERT INTO goals" +
-			" (goal, team_id, user_id)" +
-			" VALUES ($1,$2,$3)", [goal, team_id,user_id], function(error,result){
+			" (goal, status, team_id, assigned_user_id)" +
+			" VALUES ($1,$2,$3,$4) RETURNING id", [goal,status,team_id,assigned_user_id], function(error,result){
 				if (error) return console.log(error);
 				callback(result);
 			}
@@ -137,7 +135,8 @@ module.exports = (function() {
  		retrieveUsers: retrieveUsers,
  		getUserIDFromName: getUserIDFromName,
  		createGoal: createGoal,
- 		getTeamMembers: getTeamMembers
+ 		getTeamMembers: getTeamMembers,
+ 		updateGoals: updateGoals
 	};
 
 })();

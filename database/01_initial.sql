@@ -27,6 +27,7 @@ ALTER TABLE individuals OWNER TO scrum_server;
 CREATE TABLE goals (
 	id     					serial PRIMARY KEY,
 	goal    				text,
+	status					boolean,
 	team_id					integer,
 	assigned_user_id		integer, 
 

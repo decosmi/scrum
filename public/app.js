@@ -8,17 +8,42 @@ app.controller('toDoCtrl', function($scope,$http,sendData) {
 
     $scope.toDoAdd = function() {
         $scope.toDoItems.push({todoText:$scope.todoInput, done:false});
-        //$scope.todoInput = "";	//Why do I need this line? It doesn't break if I take it out. 
+        $http({
+            method:'POST',
+            url:'/goals',
+            data:{goal:$scope.todoInput, status:false, team_id: sendData.teamID, assigned_user_id: sendData.assignedUserID}
+        }).then(function successCallback(data){
+            sendData.goalID=data.data.rows[0].id;
+            console.log(sendData.goalID);
+        }, 
+        function errorCallback(data){
+            console.log("Didn't work.");
+            console.log(data);
+        });         
+
+        $scope.todoInput = "";	
     };
 
     $scope.remove = function() {
         var oldList = $scope.toDoItems;
         $scope.toDoItems=[];
-
         angular.forEach(oldList, function(x) {
             if (!x.done) {
-            $scope.toDoItems.push(x.todoText);
+                console.log(x);
+                $scope.toDoItems.push(x);
+                console.log($scope.toDoItems);
             }
+            $http({
+                method:'PUT',
+                url:'/goals',
+                data:{id:sendData.goalID, goal:x, status:false, team_id: sendData.teamID, assigned_user_id: sendData.assignedUserID}
+            }).then(function successCallback(data){
+                console.log("Way to go!");
+            }, 
+            function errorCallback(data){
+                console.log("Didn't work.");
+                console.log(data);
+            });        
         });
     };
 
@@ -44,7 +69,6 @@ app.controller('toDoCtrl', function($scope,$http,sendData) {
             params: {username:$scope.selectedMember} 
         }).then(function successCallback(data){
             sendData.assignedUserID=data.data.rows[0].id;
-            console.log(sendData.assignedUserID);
         }, 
         function errorCallback(data){
             console.log("Oops");
@@ -141,15 +165,10 @@ app.controller('teamCtrl', function($scope,$http,sendData) {
 
 });
 
-
-
 app.service('sendData',function(){
     this.userID=0;
     this.username=0;
     this.teamID=30;
     this.assignedUserID=0;
-    this.users=[];
-
-
-
+    this.goalID=0;
 });

@@ -52,9 +52,19 @@ app.get("/teammembers", function(request,response){
 });
 
 app.get("/goals", function(request,response){
-	console.log("We're in the server");
 	databaseManager.getUserIDFromName(request.query.username, function(result){
 		return response.send(result); 
 
 	});
+});
+
+app.post("/goals", function(request,response){
+	databaseManager.createGoal(request.body.goal, request.body.status,request.body.team_id,request.body.assigned_user_id, function(result){
+		return response.send(result);
+	 });
+});
+
+app.put("/goals", function(request,response){
+	console.log(request);
+	//databaseManager.updateGoals();
 });
