@@ -46,7 +46,7 @@ app.get("/users", function(request,response){
 });
 
 app.get("/teammembers", function(request,response){
-	databaseManager.getTeamMembers(30, function(result){
+	databaseManager.getTeamMembers(request.query.team_id, function(result){
 		return response.send(result);
 	});
 });

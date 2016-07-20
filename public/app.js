@@ -107,7 +107,6 @@ app.controller('loginCtrl', function($scope, $http,sendData){
             sendData.userID=data.data.rows[0].id;
             sendData.teamID=data.data.rows[0].team_id;
             sendData.username=data.data.rows[0].user_name;
-            console.log(sendData.username);
 
         }, 
         function errorCallback(data){
