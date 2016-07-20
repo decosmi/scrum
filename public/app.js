@@ -2,8 +2,9 @@
 
 var app = angular.module('myApp', []);
 
-app.controller('toDoCtrl', function($scope) {
+app.controller('toDoCtrl', function($scope,$http,sendData) {
     $scope.toDoItems=[];
+    $scope.teamMembers=[];
 
     $scope.toDoAdd = function() {
         $scope.toDoItems.push({todoText:$scope.todoInput, done:false});
@@ -20,6 +21,36 @@ app.controller('toDoCtrl', function($scope) {
             }
         });
     };
+
+    $scope.findTeamMembers= function(){
+        $http({
+            method:'GET',
+            url:'/teammembers',
+            params:{team_id: sendData.teamID}
+        }) 
+        .then(function successCallback(data){
+            for (var i=0; i<data.data.rows.length;i++) {
+                $scope.teamMembers.push(data.data.rows[i].user_name);
+            }      
+            }, 
+            function errorCallback(data){console.log("Didn't work.")
+        });
+    }
+
+    $scope.assignTask = function(){  
+        $http({
+            method:'GET',
+            url:'/goals',
+            params: {username:$scope.selectedMember} 
+        }).then(function successCallback(data){
+            sendData.assignedUserID=data.data.rows[0].id;
+            console.log(sendData.assignedUserID);
+        }, 
+        function errorCallback(data){
+            console.log("Oops");
+        }); 
+    }
+
 });
 
 app.controller('registerCtrl', function($scope, $http){   
@@ -29,16 +60,23 @@ app.controller('registerCtrl', function($scope, $http){
             url:'/scrum',
             data: {username:$scope.newUser, password:$scope.newPassword} 
         }).then(function successCallback(data){
-            console.log("It worked!");
-        	console.log(data.config.data.username);
-            return true;
         }, 
         function errorCallback(data){
         	console.log("It didn't work.");
-        	console.log(data.config.data.username);
-
-        return false;
         });  
+    }
+    
+    $scope.joinTeam= function(){
+        $http({
+            method:'GET',
+            url:'/userteam',
+            params: {team_name:$scope.selectedName, id:sendData.userID} 
+        }).then(function successCallback(data){
+            console.log(data);
+        }, 
+        function errorCallback(data){
+            console.log("Didn't work.");
+        });         
     }
 });
 
@@ -60,22 +98,21 @@ app.controller('loginCtrl', function($scope, $http,sendData){
 });
 
 app.controller('teamCtrl', function($scope,$http,sendData) {
-	$scope.teamMembers=[];
     $scope.teams=[];
     $scope.teamID=[];//make sure to delete this and the push function that goes with it if you don't use it
 
 
 	$scope.addTeam= function(){
-        console.log($scope.teamName);
         $http({
             method:'POST',
             url:'/team',
             data:{team_name:$scope.teamName}
         }).then(function successCallback(data){
-        	alert("You've successfully added your team.");
+            console.log(data);
         }, 
         function errorCallback(data){
      		console.log("Didn't work.");
+            console.log(data);
         });  		
 	}
 
@@ -93,20 +130,8 @@ app.controller('teamCtrl', function($scope,$http,sendData) {
             function errorCallback(data){console.log("Didn't work.")
         });
     }
-    $scope.joinTeam= function(){
-        console.log(sendData.userID);
-        console.log($scope.selectedName);
-        $http({
-            method:'GET',
-            url:'/userteam',
-            params: {team_name:$scope.selectedName, id:sendData.userID} 
-        }).then(function successCallback(data){
-            alert("You've successfully added your team.");
-        }, 
-        function errorCallback(data){
-            console.log("Didn't work.");
-        });         
-    }
+
+
     $scope.findUsers= function(){
         $scope.users=sendData.users
         console.log($scope.users);
@@ -115,8 +140,6 @@ app.controller('teamCtrl', function($scope,$http,sendData) {
             url:'/users',
         }) 
         .then(function successCallback(data){
-            console.log("right before the for loop");
-            console.log(data);
             for (var i=0; i<data.data.rows.length;i++) {
                 $scope.users.push(data.data.rows[i].user_name);
             }      
@@ -124,10 +147,16 @@ app.controller('teamCtrl', function($scope,$http,sendData) {
             function errorCallback(data){console.log("Didn't work.")
         });
     }
+
+
 });
+
+
 
 app.service('sendData',function(){
     this.userID=0;
     this.users=[];
+    this.teamID=30;
+    this.assignedUserID=0;
 
 });

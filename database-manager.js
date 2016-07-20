@@ -25,6 +25,17 @@ module.exports = (function() {
 		);
 	}
 
+	var getUserIDFromName= function(username,callback){
+		console.log(username);
+		pool.query(
+			"SELECT id FROM individuals" +
+			" WHERE user_name = $1;", [username], function(error,result){
+				if (error) return console.log("Whoops");
+				callback(result);
+			});
+
+	}
+
 	var getTeamIDFromName= function(team_name,userID,callback){
 		console.log(userID);
 		console.log(team_name);
@@ -32,23 +43,25 @@ module.exports = (function() {
 			"SELECT id FROM team" +
 			" WHERE team_name = $1;", [team_name], function(error,result){
 				if (error) return console.log("Whoops");
-				//console.log(result.rows);
-				//console.log(userID);
+				console.log(result.rows[0].id);
 				callback(userID, result.rows[0].id);
 			});
 
 	}
+	var partialUpdateUserWithTeam= function(userID,callback){
+		return function(teamID) {
+			updateUserWithTeam(userID,teamID,callback)
+		}
+	}
 
-	var updateUserWithTeam= function(userID,teamID){
-		//console.log("This is what it received for teamID:")
-		//console.log(teamID.rows);
-		//console.log("This is what it received for userID:")
-		//console.log(userID.rows);
+
+	var updateUserWithTeam= function(userID,teamID,callback){
 		pool.query (
 			"UPDATE individuals" +
 			" SET team_id = $1" +
 			" WHERE id= $2;", [teamID, userID], function(error,result){
 				if (error) return console.log("Oops");
+				callback(result);//here I would like to have a callback that returns the response to app.js
 			}
 		);
 	}
@@ -92,6 +105,36 @@ module.exports = (function() {
 
 	}
 
+	var retrieveUsers= function(callback){
+		pool.query(
+			"SELECT * FROM individuals", function(error,result){
+				if (error) return console.log(error);
+				callback(result);
+			});
+
+	}
+
+	var getTeamMembers= function(team_id,callback){
+		pool.query(
+			"SELECT user_name FROM individuals" +
+			" WHERE team_id = $1;", [team_id], function(error,result){
+				if (error) return console.log("Whoops");
+				callback(result);
+			});
+
+	}
+	var createGoal= function(goal,team_id, user_id,callback){
+		pool.query(
+			"INSERT INTO goals" +
+			" (goal, team_id, user_id)" +
+			" VALUES ($1,$2,$3)", [goal, team_id,user_id], function(error,result){
+				if (error) return console.log(error);
+				callback(result);
+			}
+		);
+	}
+
+
  	return {
  		saveUser: saveUser,
  		readProfile: readProfile,
@@ -99,27 +142,16 @@ module.exports = (function() {
  		retrieveTeams: retrieveTeams,
  		updateUserWithTeam: updateUserWithTeam,
  		getTeamIDFromName: getTeamIDFromName,
- 		retrieveUsers: retrieveUsers
+ 		retrieveUsers: retrieveUsers,
+ 		getUserIDFromName: getUserIDFromName,
+ 		createGoal: createGoal,
+ 		partialUpdateUserWithTeam: partialUpdateUserWithTeam,
+ 		getTeamMembers: getTeamMembers
 	};
 
 })();
 
 
-	// var createGoal= function(goal,team_id, assigned_user_id){
-	// 	pool.query(
-	// 		"INSERT INTO goals" +
-	// 		" (item, profile_id)" +
-	// 		" VALUES ($1,$2,$3)", [item, profile_id,assigned_user_id], function(error,result){
-	// 			if (error) return console.log(error);
-	// 		}
-	// 	);
-	// }
 
-	// var addTeamMembers= function(unsure){ 
-	// 	pool.query(
-	// 		This function cannot be built until I understand how my team table should be organized.
-	// 		, function(error,result){
-	// 			if (error) return console.log(error);
-	// 		}
-	// 	);
-	// }
+
+

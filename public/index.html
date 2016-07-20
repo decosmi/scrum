@@ -25,9 +25,9 @@
 	</div>
 	<div id="intro">
 		<h3>Explanation of tool</h3>
+		<h2>Please register here to begin.</h2>
 	</div>
 	<div id="register" ng-controller="registerCtrl">
-		<h2>Please register here to begin.</h2>
 			<form ng-submit="addRegistrants()">	    
 				<input type="text" ng-model="newUser" placeholder="Choose username.">
 		    	<input type="text" ng-model="newPassword" placeholder="Choose Password.">
@@ -46,6 +46,7 @@
 	<div id="teamRegister" class="row" ng-controller="teamCtrl">
 		<div class="col-md-4">
 			<h2>Join a team!</h2>
+			<button ng-click="findUsers()">I'll create my own.</button>
 			<button ng-click="findTeams()">Find Teams</button>
 			<select ng-model="selectedName" ng-options="x for x in teams"></select>
 			<button ng-click="joinTeam()">Join</button>
@@ -57,29 +58,35 @@
 		    	<input type="submit" value="Create A Team">
 		    </form>
 	    </div>
-	    <div class="col-md-4">
+<!-- 	    <div class="col-md-4">
 	    	<h2>Add team members.</h2>
 			<select ng-model="selectedName" ng-options="x for x in users"></select>
-			<button ng-click="findUsers()">Add</button>
-	    </div>
+			<button ng-click="addMember()">Add</button>
+	    </div> -->
 	</div>
 
-	<div id="todo" ng-controller="toDoCtrl">
-		<h2>To Do Items</h2>
-			<form ng-submit="toDoAdd()">
-	    		<input type="text" ng-model="todoInput" size="75" placeholder="Add New">
-	   			 <input type="submit" value="Add New">
-			</form>
-
-		<br>
-
-		<div ng-repeat="x in toDoItems">
-		    <input type="checkbox" ng-model="x.done"> <span ng-bind="x.todoText"></span>
+	<div class="row" id="todo" ng-controller="toDoCtrl">
+		<div class="col-md-3">
 		</div>
-		<p><button ng-click="remove()">Remove marked</button></p> 
+		
+		<div class="col-md-6">
+			<h1>To Do Items</h1>
+			<button ng-click="findTeamMembers()">Show Team Members</button>
+	    	<select ng-model="selectedMember" ng-options="x for x in teamMembers"></select>
+	    	<button ng-click="assignTask()">Assign Task</button>
+	    	<br>
+			<form ng-submit="toDoAdd()">
+	    		<input type="text" ng-model="todoInput" size="75" placeholder="Add New Item">
+	   			<input type="submit" value="Save Item">
+			</form>
+			<div ng-repeat="x in toDoItems">
+		    	<input type="checkbox" ng-model="x.done"> <span ng-bind="x.todoText"></span>
+			</div>
+			<br>
+			<button ng-click="remove()">Remove marked</button>
+		</div>
 	</div>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script src="app.js"></script>
 </body>

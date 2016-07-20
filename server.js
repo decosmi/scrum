@@ -26,9 +26,8 @@ app.get("/scrum", function(request,response){
 });
 
 app.post("/team", function(request, response) {
-	//console.log(request.body.team_name);
-	databaseManager.createTeam(request.body.team_name);
-});
+	databaseManager.createTeam(request.body.team_name)
+	});
 
 app.get("/team", function(request, response) {
 	databaseManager.retrieveTeams(function(result){
@@ -37,11 +36,25 @@ app.get("/team", function(request, response) {
 });
 
 app.get("/userteam", function(request,response){
-	databaseManager.getTeamIDFromName(request.query.team_name,request.query.id, databaseManager.updateUserWithTeam);
+	databaseManager.getTeamIDFromName(request.query.team_name,request.query.id, databaseManager.partialUpdateUserWithTeam);
 });
 
 app.get("/users", function(request,response){
 	databaseManager.retrieveUsers(function(result){
 		return response.send(result);
+	});
+});
+
+app.get("/teammembers", function(request,response){
+	databaseManager.getTeamMembers(30, function(result){
+		return response.send(result);
+	});
+});
+
+app.get("/goals", function(request,response){
+	console.log("We're in the server");
+	databaseManager.getUserIDFromName(request.query.username, function(result){
+		return response.send(result); 
+
 	});
 });
