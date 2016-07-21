@@ -6,6 +6,13 @@ app.controller('toDoCtrl', function($scope,$http,sendData) {
     $scope.toDoItems=[];
     $scope.teamMembers=[];
 
+    $scope.$on('Got the goods!', function(){
+        var array=sendData.userGoals;
+        console.log(array[0].goal);
+        for(var i=0; i<array.length; i++ ){
+        $scope.toDoItems.push(array[i].goal);
+        }
+    });
     $scope.toDoAdd = function() {
         $scope.toDoItems.push({todoText:$scope.todoInput, done:false});
         $http({
@@ -121,7 +128,7 @@ app.controller('registerCtrl', function($scope, $http,sendData){
     }
 });
 
-app.controller('loginCtrl', function($scope, $http,sendData){
+app.controller('loginCtrl', function($scope, $http,sendData,$rootScope){
     $scope.verifyUser = function(callback){  
         $http({
             method:'GET',
@@ -147,7 +154,9 @@ app.controller('loginCtrl', function($scope, $http,sendData){
             params:{id: sendData.userID}
         }) 
         .then(function successCallback(data){
-            console.log(data.data.rows[0].goal);
+            sendData.userGoals=data.data.rows;
+            console.log(sendData.userGoals);
+            $rootScope.$broadcast('Got the goods!');
             },      
             function errorCallback(data){console.log("Didn't work.")
         });
@@ -185,4 +194,5 @@ app.service('sendData',function(){
     this.teamID=30;
     this.assignedUserID=0;
     this.goalID=0;
+    this.userGoals=[];
 });
