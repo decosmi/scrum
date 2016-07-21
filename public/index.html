@@ -16,18 +16,17 @@
 
 
     <link href="style.css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Prompt:100' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Prompt' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Kanit:800' rel='stylesheet' type='text/css'>
 </head>
 <body ng-app="myApp" >
 	<div id="header" class="jumbotron">
-		<h1><span id="headerOne">SCRUM BOSS</span> | <span id="headerTwo">Project Management Simplified</span></h1>
+		<h1><span id="headerOne">SCRUM BOSS</span><span id="headerTwo"> | Project Management Simplified</span></h1>
 	</div>
-	<div id="showfirst" ng-show="showRegister()">
+	<div id="showfirst"  class="component"> <!-- ng-show="showRegister()" -->
 		<div id="intro">
-			<h3>Scrum Boss keeps track of all of the moving pieces so you can focus on getting projects done.</h3>
-			<h2>Please register here to begin.</h2>
+			<h3>Scrum Boss keeps track of all of the moving pieces so your team can focus on getting projects done. Please register here to begin.</h3>
 
 		</div>
 		<div id="register" class="row" ng-controller="registerCtrl">
@@ -49,8 +48,9 @@
 			<div class="col-md-6"></div>
 		</div>
 	</div>
+	<br>
 
-	<div id="showsecond" ng-show="showLogin()">
+	<div id="showsecond"  class="component"> <!-- ng-show="showLogin()" -->
 		<div id="login" ng-controller="loginCtrl">
 			<h2>Already registered? Let's get to work! Login here.</h2>
 				<form ng-submit="verifyUser(getToDoList)">
@@ -60,14 +60,15 @@
 				</form>
 		</div>
 	</div>
+	<br>
 
-	<div id="showthird" ng-show="showGoals()">
+	<div id="showthird"  class="component"> <!-- ng-show="showGoals()" -->
 		<div class="row" id="todo" ng-controller="toDoCtrl">
 			<div class="col-md-3">
 			</div>
 			
 			<div class="col-md-6">
-				<h1>To Do Items</h1>
+				<h1 id="todo">To Do Items</h1>
 				<button ng-click="findTeamMembers()">Assign Task to a Team Member</button>
 		    	<select ng-model="selectedMember" ng-options="x for x in teamMembers"></select>
 		    	<br>

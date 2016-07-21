@@ -2,11 +2,13 @@ body {
   background-color: #a8dadc;
   background-image:url("keyboard.jpg");
   background-size:cover;
-  font-family: "Prompt", sans-serif; }
-
- .jumbotron {
-
- }
+  font-family: "Prompt", sans-serif; 
+  font-weight:bold;
+  color:white;
+}
+#todo {
+	color:white;
+}
 
  #headerOne{
  	color:#e63946;
@@ -16,6 +18,15 @@ body {
 
  #headerTwo{
  	font-size:50px;
+ 	color:#1d3557;
+ }
+
+ .component{
+ 	background-color:#457b9d;
+ 	opacity: .8;
+ 	margin:auto;
+ 	width:70%;
+ 	padding:10px;
  }
 
 h1 {
@@ -23,11 +34,15 @@ h1 {
   color: #e63946;
   margin-bottom: 5px; }
 
-h3 {
-  font-family: "Montserrat", sans-serif; }
 
-#teamRegister {
+ button {
+  padding: 10px;
+  margin: 20px; 
   background-color: #e63946;
-  font-color: white; }
+  color:white;	
+  font-weight:bold;
+}
+
+
 
 /*# sourceMappingURL=style.css.map */
