@@ -3,14 +3,22 @@
 var app = angular.module('myApp', []);
 
 app.controller('toDoCtrl', function($scope,$http,sendData,controlDisplay) {
+    $scope.showGoals=function(){
+        return controlDisplay.showGoals;
+    }
+
     $scope.toDoItems=[];
     $scope.teamMembers=[];
 
     $scope.$on('Got the goods!', function(){
         var array=sendData.userGoals;
-        console.log(array[0].goal);
+        //console.log(array);
         for(var i=0; i<array.length; i++ ){
-        $scope.toDoItems.push(array[i].goal);
+   
+        //console.log($scope.todoText);
+        $scope.toDoItems.push({todoText:array[i].goal, done:false});
+        //$scope.toDoText=array[i].goal;
+        //console.log($scope.toDoItems);
         }
     });
     $scope.toDoAdd = function() {
@@ -86,7 +94,10 @@ app.controller('toDoCtrl', function($scope,$http,sendData,controlDisplay) {
 
 });
 
-app.controller('registerCtrl', function($scope, $http,sendData,controlDisplay){   
+app.controller('registerCtrl', function($scope, $http,sendData,controlDisplay){  
+    $scope.showRegister=function(){
+        return controlDisplay.showRegister;
+    } 
     $scope.teams=[];
 
     $scope.addRegistrants = function(){   
@@ -133,6 +144,9 @@ app.controller('registerCtrl', function($scope, $http,sendData,controlDisplay){
 });
 
 app.controller('loginCtrl', function($scope, $http,sendData,$rootScope,controlDisplay){
+        $scope.showLogin=function(){
+        return controlDisplay.showLogin;
+    }
     $scope.verifyUser = function(callback){  
         $http({
             method:'GET',
