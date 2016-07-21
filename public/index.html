@@ -23,64 +23,63 @@
 	<div id="header" class="jumbotron">
 		<h1><span id="headerOne">Scrum Boss</span> | <span id="headerTwo">Project Management Tool</span></h1>
 	</div>
-	<div id="intro">
-		<h3>Scrum Boss keeps track of all of the moving pieces so you can focus on getting projects done.</h3>
-		<h2>Please register here to begin.</h2>
-	</div>
-	<div id="register" class="row" ng-controller="registerCtrl">
-		<form class="col-md-6">	 
-			<h4>Choose a username, password and team.</h4>   
-			<input type="text" ng-model="newUser" placeholder="Choose username.">
-	    	<input type="text" ng-model="newPassword" placeholder="Choose Password.">
-	    	<button ng-click="findTeams()">Find Your Team</button>
-			<select ng-model="selectedName" ng-options="x for x in teams"></select>
-	    </form>
-	    <div class="col-md-6">
-		    <h4>Don't see a team you like? Create your own!</h4>
-			<form ng-submit="addTeam()">	    
-				<input type="text" ng-model="teamName" placeholder="Name Your Team">
-		    	<input type="submit" value="Create A Team">
-	    	</form>
+	<div id="showfirst" ng-show="showRegister()">
+		<div id="intro">
+			<h3>Scrum Boss keeps track of all of the moving pieces so you can focus on getting projects done.</h3>
+			<h2>Please register here to begin.</h2>
+
 		</div>
-
-		<button class= "col-md-4" ng-click="addRegistrants()"">Register</button>
-		<div class="col-md-6"></div>
-	</div>
-
-	<div id="login" ng-controller="loginCtrl">
-		<h2>Let's get to work! Login here.</h2>
-			<form ng-submit="verifyUser(getToDoList)">
-				<input type="text" ng-model="username" placeholder="Enter username.">
-			    <input type="text" ng-model="password" placeholder="Enter Password.">
-			    <input type="submit" value="Login">
-			</form>
-	</div>
-<!-- 	    <div class="col-md-4">
-	    	<h2>Add team members.</h2>
-			<select ng-model="selectedName" ng-options="x for x in users"></select>
-			<button ng-click="addMember()">Add</button>
-	    </div> -->
-	</div>
-
-	<div class="row" id="todo" ng-controller="toDoCtrl">
-		<div class="col-md-3">
-		</div>
-		
-		<div class="col-md-6">
-			<h1>To Do Items</h1>
-			<button ng-click="findTeamMembers()">Show Team Members</button>
-	    	<select ng-model="selectedMember" ng-options="x for x in teamMembers"></select>
-	    	<button ng-click="assignTask()">Assign Task</button>
-	    	<br>
-			<form ng-submit="toDoAdd()">
-	    		<input type="text" ng-model="todoInput" size="75" placeholder="Add New Item">
-	   			<input type="submit" value="Save Item">
-			</form>
-			<div ng-repeat="x in toDoItems">
-		    	<input type="checkbox" ng-model="x.done"> <span ng-bind="x.todoText"></span>
+		<div id="register" class="row" ng-controller="registerCtrl">
+			<form class="col-md-6">	 
+				<h4>Choose a username, password and team.</h4>   
+				<input type="text" ng-model="newUser" placeholder="Choose username.">
+		    	<input type="text" ng-model="newPassword" placeholder="Choose Password.">
+		    	<button ng-click="findTeams()">Find Your Team</button>
+				<select ng-model="selectedName" ng-options="x for x in teams"></select>
+		    </form>
+		    <div class="col-md-6">
+			    <h4>Don't see a team you like? Create your own!</h4>
+				<form ng-submit="addTeam()">	    
+					<input type="text" ng-model="teamName" placeholder="Name Your Team">
+			    	<input type="submit" value="Create A Team">
+		    	</form>
 			</div>
-			<br>
-			<button ng-click="remove()">Remove marked</button>
+			<button class= "col-md-4" ng-click="addRegistrants()"">Register</button>
+			<div class="col-md-6"></div>
+		</div>
+	</div>
+
+	<div id="showsecond" ng-show="showLogin()">
+		<div id="login" ng-controller="loginCtrl">
+			<h2>Already registered? Let's get to work! Login here.</h2>
+				<form ng-submit="verifyUser(getToDoList)">
+					<input type="text" ng-model="username" placeholder="Enter username.">
+				    <input type="text" ng-model="password" placeholder="Enter Password.">
+				    <input type="submit" value="Login">
+				</form>
+		</div>
+	</div>
+
+	<div id="showthird" ng-show="showGoals()">
+		<div class="row" id="todo" ng-controller="toDoCtrl">
+			<div class="col-md-3">
+			</div>
+			
+			<div class="col-md-6">
+				<h1>To Do Items</h1>
+				<button ng-click="findTeamMembers()">Assign Task to a Team Member</button>
+		    	<select ng-model="selectedMember" ng-options="x for x in teamMembers"></select>
+		    	<br>
+				<form ng-submit="assignTask(toDoAdd)">
+		    		<input type="text" ng-model="todoInput" size="75" placeholder="Add New Item">
+		   			<input type="submit" value="Save Item">
+				</form>
+				<div ng-repeat="x in toDoItems">
+			    	<input type="checkbox" ng-model="x.done"> <span ng-bind="x.todoText"></span>
+				</div>
+				<br>
+				<button ng-click="remove()">Remove marked</button>
+			</div>
 		</div>
 	</div>
 

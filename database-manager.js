@@ -21,7 +21,7 @@ module.exports = (function() {
 			"(user_name, password)" +
 			"VALUES ($1, $2) RETURNING id", [username, password], function (error, result){
 				if (error) return console.log(error);
-				callback(teamname,result.rows[0].id,updateUserWithTeam);
+				callback(result);
 			}
 		);
 	}

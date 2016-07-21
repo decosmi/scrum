@@ -2,7 +2,7 @@
 
 var app = angular.module('myApp', []);
 
-app.controller('toDoCtrl', function($scope,$http,sendData) {
+app.controller('toDoCtrl', function($scope,$http,sendData,controlDisplay) {
     $scope.toDoItems=[];
     $scope.teamMembers=[];
 
@@ -14,6 +14,7 @@ app.controller('toDoCtrl', function($scope,$http,sendData) {
         }
     });
     $scope.toDoAdd = function() {
+        console.log("We did it..maybe.");
         $scope.toDoItems.push({todoText:$scope.todoInput, done:false});
         $http({
             method:'POST',
@@ -69,13 +70,14 @@ app.controller('toDoCtrl', function($scope,$http,sendData) {
         });
     }
 
-    $scope.assignTask = function(){  
+    $scope.assignTask = function(callback){  
         $http({
             method:'GET',
             url:'/goals',
             params: {username:$scope.selectedMember} 
         }).then(function successCallback(data){
             sendData.assignedUserID=data.data.rows[0].id;
+            callback();
         }, 
         function errorCallback(data){
             console.log("Oops");
@@ -84,7 +86,7 @@ app.controller('toDoCtrl', function($scope,$http,sendData) {
 
 });
 
-app.controller('registerCtrl', function($scope, $http,sendData){   
+app.controller('registerCtrl', function($scope, $http,sendData,controlDisplay){   
     $scope.teams=[];
 
     $scope.addRegistrants = function(){   
@@ -93,6 +95,8 @@ app.controller('registerCtrl', function($scope, $http,sendData){
             url:'/scrum',
             data: {username:$scope.newUser, password:$scope.newPassword,team_name:$scope.selectedName,} 
         }).then(function successCallback(data){
+            controlDisplay.showLogin=true;
+            console.log(controlDisplay.showLogin);
         }, 
         function errorCallback(data){
         	console.log("It didn't work.");
@@ -128,7 +132,7 @@ app.controller('registerCtrl', function($scope, $http,sendData){
     }
 });
 
-app.controller('loginCtrl', function($scope, $http,sendData,$rootScope){
+app.controller('loginCtrl', function($scope, $http,sendData,$rootScope,controlDisplay){
     $scope.verifyUser = function(callback){  
         $http({
             method:'GET',
@@ -138,6 +142,11 @@ app.controller('loginCtrl', function($scope, $http,sendData,$rootScope){
             sendData.userID=data.data.rows[0].id;
             sendData.teamID=data.data.rows[0].team_id;
             sendData.username=data.data.rows[0].user_name;
+            controlDisplay.showGoals=true;
+            controlDisplay.showLogin=false;
+            controlDisplay.showRegister=false;
+            console.log(controlDisplay.showGoals);
+            console.log(controlDisplay.showRegister);
             callback(sendData.userID);
 
         }, 
@@ -148,6 +157,7 @@ app.controller('loginCtrl', function($scope, $http,sendData,$rootScope){
     }
 
     $scope.getToDoList= function(assigned_user_id){
+        console.log(controlDisplay.showGoals);
         $http({
             method:'GET',
             url:'/savedgoals',
@@ -155,7 +165,6 @@ app.controller('loginCtrl', function($scope, $http,sendData,$rootScope){
         }) 
         .then(function successCallback(data){
             sendData.userGoals=data.data.rows;
-            console.log(sendData.userGoals);
             $rootScope.$broadcast('Got the goods!');
             },      
             function errorCallback(data){console.log("Didn't work.")
@@ -163,12 +172,7 @@ app.controller('loginCtrl', function($scope, $http,sendData,$rootScope){
     }
 });
 
-app.controller('teamCtrl', function($scope,$http,sendData) {
-
-
-
-
-
+app.controller('teamCtrl', function($scope,$http,sendData,controlDisplay) {
     $scope.findUsers= function(){
         $scope.users=sendData.users
         console.log($scope.users);
@@ -195,4 +199,10 @@ app.service('sendData',function(){
     this.assignedUserID=0;
     this.goalID=0;
     this.userGoals=[];
+});
+
+app.service('controlDisplay',function(){
+    this.showRegister=true;
+    this.showLogin=true;
+    this.showGoals=false;
 });
