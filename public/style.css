@@ -43,6 +43,14 @@ h1 {
   font-weight:bold;
 }
 
+input {
+  color:#1d3557;
+}
+
+select {
+  color:#1d3557;
+}
+
 
 
 /*# sourceMappingURL=style.css.map */
