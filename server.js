@@ -65,6 +65,5 @@ app.post("/goals", function(request,response){
 });
 
 app.put("/goals", function(request,response){
-	console.log(request);
-	//databaseManager.updateGoals();
+	databaseManager.updateGoals(request.body.id);
 });

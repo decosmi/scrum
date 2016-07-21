@@ -36,7 +36,7 @@ app.controller('toDoCtrl', function($scope,$http,sendData) {
             $http({
                 method:'PUT',
                 url:'/goals',
-                data:{id:sendData.goalID, goal:x, status:false, team_id: sendData.teamID, assigned_user_id: sendData.assignedUserID}
+                data:{id:sendData.goalID}
             }).then(function successCallback(data){
                 console.log("Way to go!");
             }, 
