@@ -122,7 +122,7 @@ app.controller('registerCtrl', function($scope, $http,sendData){
 });
 
 app.controller('loginCtrl', function($scope, $http,sendData){
-    $scope.verifyUser = function(){  
+    $scope.verifyUser = function(callback){  
         $http({
             method:'GET',
             url:'/scrum',
@@ -131,12 +131,26 @@ app.controller('loginCtrl', function($scope, $http,sendData){
             sendData.userID=data.data.rows[0].id;
             sendData.teamID=data.data.rows[0].team_id;
             sendData.username=data.data.rows[0].user_name;
+            callback(sendData.userID);
 
         }, 
         function errorCallback(data){
         	console.log("Your username and password were not found. Please retry or register.");
             console.log(data);
         }); 
+    }
+
+    $scope.getToDoList= function(assigned_user_id){
+        $http({
+            method:'GET',
+            url:'/savedgoals',
+            params:{id: sendData.userID}
+        }) 
+        .then(function successCallback(data){
+            console.log(data.data.rows[0].goal);
+            },      
+            function errorCallback(data){console.log("Didn't work.")
+        });
     }
 });
 

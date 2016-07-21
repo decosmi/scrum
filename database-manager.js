@@ -124,6 +124,16 @@ module.exports = (function() {
 		);
 	}
 
+	var retrieveGoals= function(assigned_user_id, callback){
+		pool.query(
+			"SELECT goal FROM goals" +
+			" WHERE assigned_user_id = $1;", [assigned_user_id], function(error,result){
+				if (error) return console.log("Whoops");
+				callback(result);
+			});
+
+	}
+
 
  	return {
  		saveUser: saveUser,
@@ -136,7 +146,8 @@ module.exports = (function() {
  		getUserIDFromName: getUserIDFromName,
  		createGoal: createGoal,
  		getTeamMembers: getTeamMembers,
- 		updateGoals: updateGoals
+ 		updateGoals: updateGoals,
+ 		retrieveGoals: retrieveGoals
 	};
 
 })();

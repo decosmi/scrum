@@ -67,3 +67,9 @@ app.post("/goals", function(request,response){
 app.put("/goals", function(request,response){
 	databaseManager.updateGoals(request.body.id);
 });
+
+app.get("/savedgoals", function(request,response){
+	databaseManager.retrieveGoals(request.query.id, function(result){
+		return response.send(result);
+	});
+});
